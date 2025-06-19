@@ -44,7 +44,7 @@
       "package.json"
     ],
     "mac": {
-      "icon": "src/assets/icons/icon.icns",
+      "icon": "src/assets/icons/rename.ico",
       "category": "public.app-category.utilities",
       "target": [
         {
@@ -54,7 +54,7 @@
       ]
     },
     "win": {
-      "icon": "src/assets/icons/icon.ico",
+      "icon": "src/assets/icons/rename.ico",
       "target": [
         {
           "target": "nsis",

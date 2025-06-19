@@ -7,7 +7,6 @@
 *.p12
 *.pfx
 *.icns
-*.ico
 *.cer
 *.dmg
 *.exe

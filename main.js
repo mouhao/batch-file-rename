@@ -18,7 +18,7 @@ function createWindow() {
       contextIsolation: false,
       enableRemoteModule: true
     },
-    icon: path.join(__dirname, 'src/assets/icons/icon.png'),
+    icon: path.join(__dirname, 'src/assets/icons/rename.ico'),
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
     show: false // 先不显示，等待页面加载完成
   });
@@ -37,7 +37,9 @@ function createWindow() {
   });
 
   // 开发模式下打开开发者工具
-  mainWindow.webContents.openDevTools();
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools();
+  }
 
   // 当窗口被关闭时，取消引用窗口对象
   mainWindow.on('closed', () => {
