@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>批量文件重命名工具 by huanggh</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-header">
+        <h1 class="app-title">🗂️ 批量文件重命名工具 by huanggh</h1>
+    </div>
+    <div class="main-container">
+        <div class="container">
+            <div class="left-panel">
+                <div class="file-list-header">
+                    <div class="header-select">
+                        <input type="checkbox" id="selectAllCheckbox" title="全选/取消全选">
+                    </div>
+                    <div class="header-name">名称</div>
+                    <div class="header-size">大小</div>
+                    <div class="header-modified">修改时间</div>
+                </div>
+                <div id="fileList" class="file-list">
+                    <!-- 文件项将通过JS动态添加 -->
+                    <div class="empty-state">
+                        <p>请拖放文件或点击"添加"按钮</p>
+                    </div>
+                </div>
+                <div class="bottom-bar">
+                    <button id="addBtn" class="btn btn-with-icon">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                        添加
+                    </button>
+                    <button id="removeBtn" class="btn btn-with-icon">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                        移除
+                    </button>
+                    <div class="spacer"></div>
+                    <button id="renameBtn" class="btn btn-primary btn-with-icon">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        重命名
+                    </button>
+                </div>
+            </div>
+            <div class="right-panel">
+                <div class="tabs">
+                    <button class="tab-link active" data-tab="tab-replace">文字替换</button>
+                    <button class="tab-link" data-tab="tab-text">添加文本</button>
+                    <button class="tab-link" data-tab="tab-index">数字索引</button>
+                </div>
+                <div id="tab-replace" class="tab-content active">
+                    <h4>文字替换设置</h4>
+                    <div class="setting-group">
+                        <label>替换模式：</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="replaceMode" value="chinese_numeral" checked> 中文数字转阿拉伯数字</label>
+                            <label><input type="radio" name="replaceMode" value="custom_text"> 自定义文本替换</label>
+                        </div>
+                    </div>
+                    <div id="chinese-numeral-settings">
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="onlyChapterNumbers">
+                                只转换章节编号（如"第X回"格式）
+                            </label>
+                            <p class="setting-help">勾选后只转换"第八回"这样的章节编号，不勾选则转换文件名中所有中文数字</p>
+                        </div>
+                    </div>
+                    <div id="custom-text-settings" style="display: none;">
+                        <div class="setting-group">
+                            <label for="textToReplace">要替换的文字：</label>
+                            <input type="text" id="textToReplace" placeholder="请输入要被替换的文字">
+                        </div>
+                        <div class="setting-group">
+                            <label for="replacementText">替换为：</label>
+                            <input type="text" id="replacementText" placeholder="请输入新的文字">
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-text" class="tab-content">
+                    <h4>添加文本设置</h4>
+                    <div class="setting-group">
+                        <label>位置：</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="textPosition" value="prefix" checked> 前缀</label>
+                            <label><input type="radio" name="textPosition" value="suffix"> 后缀</label>
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                        <label for="textInput">要添加的文本：</label>
+                        <input type="text" id="textInput" placeholder="请输入文本">
+                    </div>
+                </div>
+                <div id="tab-index" class="tab-content">
+                    <h4>数字索引设置</h4>
+                    <div class="setting-group">
+                        <label>位置：</label>
+                         <div class="radio-group">
+                            <label><input type="radio" name="indexPosition" value="prefix" checked> 前缀</label>
+                            <label><input type="radio" name="indexPosition" value="suffix"> 后缀</label>
+                        </div>
+                    </div>
+                     <div class="setting-group-row">
+                        <div class="setting-item">
+                            <label for="startNumber">起始数字：</label>
+                            <input type="number" id="startNumber" value="1" min="0">
+                        </div>
+                        <div class="setting-item">
+                            <label for="digits">位数：</label>
+                            <input type="number" id="digits" value="3" min="1">
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                         <label for="separator">分隔符：</label>
+                         <input type="text" id="separator" value="_" placeholder="_">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 预览区域 -->
+        <div class="preview-section">
+            <h4>预览效果</h4>
+            <div id="previewContent" class="preview-content">
+                <p class="preview-empty">选择文件并设置重命名选项后显示预览</p>
+            </div>
+        </div>
+    </div>
+    <script src="js/rename-engine.js"></script>
+    <script src="js/renderer.js"></script>
+</body>
+</html> 

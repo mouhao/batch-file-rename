@@ -1,0 +1,524 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f0f0f0;
+    overflow: hidden;
+}
+
+/* App Header */
+.app-header {
+    background-color: #f6f6f6;
+    border-bottom: 1px solid #d1d1d1;
+    padding: 8px 20px;
+    -webkit-app-region: drag;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 40px;
+}
+
+.app-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+    -webkit-app-region: no-drag;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 40px);
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Left Panel */
+.left-panel {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+}
+
+.file-list-header {
+    display: flex;
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    font-weight: 500;
+    color: #333;
+    font-size: 12px;
+    user-select: none;
+    align-items: center;
+}
+
+.header-select {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.header-name { 
+    flex: 1; 
+    padding-left: 10px;
+}
+
+.header-size { 
+    width: 80px; 
+    text-align: right; 
+}
+
+.header-modified { 
+    width: 120px; 
+    text-align: center; 
+}
+
+.file-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    position: relative;
+    user-select: none;
+}
+
+.file-item:hover {
+    background-color: #f8f9fa;
+}
+
+.file-item.selected {
+    background-color: #e6f7ff;
+}
+
+.file-item.dragging {
+    opacity: 0.5;
+    transform: rotate(5deg);
+}
+
+.file-item.drag-over {
+    border-top: 2px solid #007aff;
+}
+
+.drag-handle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    background: transparent;
+    cursor: grab;
+    z-index: 2;
+    border: none;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.drag-handle:hover {
+    background: #ddd;
+}
+
+.drag-handle::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 16px;
+    background: repeating-linear-gradient(
+        to bottom,
+        #999 0px,
+        #999 2px,
+        transparent 2px,
+        transparent 4px
+    );
+    opacity: 0.5;
+}
+
+.file-select {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 8px;
+}
+
+.file-select input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+.file-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 10px;
+}
+
+.file-size {
+    width: 80px;
+    text-align: right;
+    color: #666;
+    font-size: 12px;
+}
+
+.file-modified {
+    width: 120px;
+    text-align: center;
+    color: #666;
+    font-size: 11px;
+}
+
+.empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #999;
+}
+
+.bottom-bar {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid #e0e0e0;
+    background-color: #f7f7f7;
+    gap: 8px;
+}
+
+.spacer {
+    flex: 1;
+}
+
+/* Right Panel */
+.right-panel {
+    width: 35%;
+    background-color: #ebebeb;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.tab-link {
+    flex: 1;
+    padding: 10px;
+    background-color: #dcdcdc;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    border-right: 1px solid #ccc;
+}
+.tab-link:last-child {
+    border-right: none;
+}
+.tab-link.active {
+    background-color: #fff;
+    font-weight: 500;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-content h4 {
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.setting-group {
+    margin-bottom: 20px;
+}
+.setting-group-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+.setting-item {
+    flex: 1;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.radio-group label {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.setting-help {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Preview Section */
+.preview-section {
+    background: white;
+    border-top: 1px solid #d1d1d1;
+    padding: 15px 20px;
+    min-height: 200px;
+    max-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-section h4 {
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.preview-content {
+    flex: 1;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 10px;
+    align-content: start;
+}
+
+.preview-empty {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+    grid-column: 1 / -1;
+}
+
+.preview-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    border: 1px solid #f0f0f0;
+    border-radius: 4px;
+    gap: 8px;
+    background: #fafafa;
+}
+
+.preview-item.selected {
+    background-color: #e6f7ff;
+    border-color: #b3e5fc;
+}
+
+.preview-item.no-change {
+    opacity: 0.6;
+}
+
+.preview-item.no-change .preview-arrow {
+    opacity: 0.3;
+}
+
+.preview-original {
+    flex: 1;
+    color: #e74c3c;
+    font-family: monospace;
+    font-size: 11px;
+    word-break: break-all;
+    min-width: 0;
+}
+
+.preview-arrow {
+    color: #333;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.preview-new {
+    flex: 1;
+    color: #27ae60;
+    font-family: monospace;
+    font-size: 11px;
+    word-break: break-all;
+    min-width: 0;
+}
+
+.preview-new.no-process {
+    color: #999;
+    font-style: italic;
+}
+
+/* Buttons */
+.btn {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+}
+
+.btn:hover {
+    background-color: #f2f2f2;
+    border-color: #999;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-with-icon {
+    padding: 6px 12px;
+}
+
+.btn-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.btn-primary {
+    background-color: #007aff;
+    color: #fff;
+    border-color: #007aff;
+}
+
+.btn-primary:hover {
+    background-color: #005ecb;
+    border-color: #005ecb;
+}
+
+.btn-primary .btn-icon {
+    stroke: white;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+    .main-content {
+        flex-direction: column;
+    }
+    
+    .left-panel, .right-panel {
+        width: 100%;
+    }
+    
+    .left-panel {
+        max-height: 40vh;
+        border-right: none;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .setting-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .header {
+        padding: 10px 15px;
+    }
+    
+    .header h1 {
+        font-size: 1.5em;
+    }
+    
+    .right-panel {
+        padding: 15px;
+    }
+    
+    .right-panel > div {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .mode-options {
+        gap: 8px;
+    }
+    
+    .mode-option {
+        padding: 12px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* 复选框样式 */
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #3498db;
+} 
