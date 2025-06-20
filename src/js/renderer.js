@@ -29,7 +29,8 @@ class FileRenameApp {
 
     initializeEventListeners() {
         // 基础事件监听器
-        document.getElementById('addBtn').addEventListener('click', () => this.addFiles());
+        document.getElementById('select-files-btn').addEventListener('click', () => this.selectFiles());
+        document.getElementById('select-folder-btn').addEventListener('click', () => this.selectFolder());
         document.getElementById('removeBtn').addEventListener('click', () => this.removeSelectedFiles());
         document.getElementById('renameBtn').addEventListener('click', () => this.performRename());
         
@@ -141,7 +142,7 @@ class FileRenameApp {
         }
     }
 
-    async addFiles() {
+    async selectFiles() {
         try {
             const result = await ipcRenderer.invoke('select-files');
             if (result.success) {
@@ -149,6 +150,17 @@ class FileRenameApp {
             }
         } catch (error) {
             console.error('选择文件时出错:', error);
+        }
+    }
+
+    async selectFolder() {
+        try {
+            const result = await ipcRenderer.invoke('select-folder');
+            if (result.success) {
+                this.addFilesToList(result.files);
+            }
+        } catch (error) {
+            console.error('选择文件夹时出错:', error);
         }
     }
 
@@ -488,6 +500,11 @@ class FileRenameApp {
                 
                 this.renderFileList();
                 this.updatePreview();
+                
+                // 修复Windows下input框无法编辑的问题 - 重新初始化事件监听器
+                setTimeout(() => {
+                    this.reinitializeInputListeners();
+                }, 100);
             } else {
                 alert(`重命名失败: ${result.error}`);
             }
@@ -534,6 +551,38 @@ class FileRenameApp {
         this.updateSelectAllCheckbox();
         this.updatePreview();
         this.renderFileList();
+    }
+
+    // 重新初始化input元素的事件监听器 - 修复Windows下重命名后input无法编辑的问题
+    reinitializeInputListeners() {
+        // 获取所有相关的input元素
+        const inputElements = [
+            'textToReplace',
+            'replacementText', 
+            'textInput',
+            'startNumber',
+            'digits',
+            'separator'
+        ];
+
+        inputElements.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                // 强制重置input元素的状态
+                element.disabled = false;
+                element.readonly = false;
+                
+                // 重新聚焦并失焦来刷新元素状态
+                element.focus();
+                element.blur();
+                
+                // 触发一个空的input事件来重新激活监听器
+                const inputEvent = new Event('input', { bubbles: true });
+                element.dispatchEvent(inputEvent);
+            }
+        });
+
+        console.log('重新初始化input监听器完成');
     }
 }
 

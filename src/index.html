@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="app-header">
-        <h1 class="app-title">🗂️ 批量文件重命名工具 by huanggh</h1>
-    </div>
+<body>
+  <div class="app-header">
+    <h1 class="app-title">🗂️ 批量文件重命名工具 by huanggh</h1>
+</div>
+
     <div class="main-container">
         <div class="container">
             <div class="left-panel">
@@ -28,30 +30,16 @@
                     </div>
                 </div>
                 <div class="bottom-bar">
-                    <button id="addBtn" class="btn btn-with-icon">
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="12" y1="8" x2="12" y2="16"/>
-                            <line x1="8" y1="12" x2="16" y2="12"/>
-                        </svg>
-                        添加
-                    </button>
-                    <button id="removeBtn" class="btn btn-with-icon">
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="15" y1="9" x2="9" y2="15"/>
-                            <line x1="9" y1="9" x2="15" y2="15"/>
-                        </svg>
-                        移除
-                    </button>
-                    <div class="spacer"></div>
-                    <button id="renameBtn" class="btn btn-primary btn-with-icon">
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                            <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                        </svg>
-                        重命名
-                    </button>
+                    <div class="toolbar">
+                        <div class="toolbar-left">
+                            <button id="select-files-btn" class="btn btn-primary">📂 选择文件</button>
+                            <button id="select-folder-btn" class="btn btn-primary">🗂️ 选择文件夹</button>
+                        </div>
+                        <div class="toolbar-right">
+                            <button id="removeBtn" class="btn btn-danger">🗑️ 移除选中</button>
+                            <button id="renameBtn" class="btn btn-success">🚀 开始重命名</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="right-panel">
@@ -66,16 +54,13 @@
                         <label>替换模式：</label>
                         <div class="radio-group">
                             <label><input type="radio" name="replaceMode" value="chinese_numeral" checked> 中文数字转阿拉伯数字</label>
+                            <input type="hidden" id="onlyChapterNumbers">
                             <label><input type="radio" name="replaceMode" value="custom_text"> 自定义文本替换</label>
                         </div>
                     </div>
                     <div id="chinese-numeral-settings">
                         <div class="setting-group">
-                            <label>
-                                <input type="checkbox" id="onlyChapterNumbers">
-                                只转换章节编号（如"第X回"格式）
-                            </label>
-                            <p class="setting-help">勾选后只转换"第八回"这样的章节编号，不勾选则转换文件名中所有中文数字</p>
+                            <p class="setting-help">转换文件名中所有中文数字</p>
                         </div>
                     </div>
                     <div id="custom-text-settings" style="display: none;">

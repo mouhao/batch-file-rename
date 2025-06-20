@@ -213,6 +213,24 @@ body, html {
     gap: 8px;
 }
 
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.toolbar-left {
+    display: flex;
+    gap: 8px;
+}
+
+.toolbar-right {
+    display: flex;
+    gap: 8px;
+}
+
 .spacer {
     flex: 1;
 }

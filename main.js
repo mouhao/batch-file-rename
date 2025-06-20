@@ -28,6 +28,11 @@ function createWindow() {
   console.log('Loading HTML from:', htmlPath);
   mainWindow.loadFile(htmlPath);
   
+  // 在 Windows 和 Linux 上移除菜单栏
+  if (process.platform !== 'darwin') {
+    mainWindow.setMenu(null);
+  }
+
   // 强制禁用缓存
   mainWindow.webContents.session.clearCache();
 
@@ -72,8 +77,8 @@ app.on('activate', () => {
 // 选择文件对话框
 ipcMain.handle('select-files', async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
-    properties: ['openFile', 'openDirectory', 'multiSelections'],
-    title: '选择要重命名的文件或文件夹'
+    properties: ['openFile', 'multiSelections'],
+    title: '选择要重命名的文件'
   });
 
   if (result.canceled || result.filePaths.length === 0) {
@@ -85,6 +90,26 @@ ipcMain.handle('select-files', async () => {
     return { success: true, files: files };
   } catch (error) {
     console.error('处理选择的文件时出错:', error);
+    return { success: false, error: error.message, files: [] };
+  }
+});
+
+// 选择文件夹对话框
+ipcMain.handle('select-folder', async () => {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openDirectory', 'multiSelections'],
+    title: '选择要重命名的文件夹'
+  });
+
+  if (result.canceled || result.filePaths.length === 0) {
+    return { success: false, files: [] };
+  }
+
+  try {
+    const files = await processFilePaths(result.filePaths);
+    return { success: true, files: files };
+  } catch (error) {
+    console.error('处理选择的文件夹时出错:', error);
     return { success: false, error: error.message, files: [] };
   }
 });
