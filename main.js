@@ -271,5 +271,28 @@ ipcMain.handle('show-message', async (event, options) => {
   return result;
 });
 
+// 修复Windows下的焦点问题 - 模拟窗口焦点离开和回归
+ipcMain.handle('fix-windows-focus-issue', async () => {
+  if (process.platform === 'win32' && mainWindow) {
+    try {
+      // 让窗口失去焦点
+      mainWindow.blur();
+      
+      // 短暂延迟后重新获取焦点
+      setTimeout(() => {
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          mainWindow.focus();
+        }
+      }, 200);
+      
+      return { success: true };
+    } catch (error) {
+      console.error('修复Windows焦点问题失败:', error);
+      return { success: false, error: error.message };
+    }
+  }
+  return { success: true }; // 非Windows平台直接返回成功
+});
+
 // 处理应用程序协议（可选）
 app.setAsDefaultProtocolClient('batch-file-rename'); 

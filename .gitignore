@@ -44,3 +44,4 @@ Thumbs.db
 # Electron 会话数据
 /.electron/ 
 .specstory
+.cursor

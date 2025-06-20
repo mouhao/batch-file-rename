@@ -501,9 +501,9 @@ class FileRenameApp {
                 this.renderFileList();
                 this.updatePreview();
                 
-                // 修复Windows下input框无法编辑的问题 - 重新初始化事件监听器
+                // 修复Windows下input框无法编辑的问题 - 模拟窗口焦点离开和回归
                 setTimeout(() => {
-                    this.reinitializeInputListeners();
+                    this.fixWindowsFocusIssue();
                 }, 100);
             } else {
                 alert(`重命名失败: ${result.error}`);
@@ -553,36 +553,37 @@ class FileRenameApp {
         this.renderFileList();
     }
 
-    // 重新初始化input元素的事件监听器 - 修复Windows下重命名后input无法编辑的问题
-    reinitializeInputListeners() {
-        // 获取所有相关的input元素
-        const inputElements = [
-            'textToReplace',
-            'replacementText', 
-            'textInput',
-            'startNumber',
-            'digits',
-            'separator'
-        ];
+    // 修复Windows下重命名后input无法编辑的问题 - 通过模拟窗口焦点离开和回归
+    async fixWindowsFocusIssue() {
+        try {
+            // 通过IPC让主窗口失去焦点然后重新获取焦点
+            await ipcRenderer.invoke('fix-windows-focus-issue');
+            console.log('Windows焦点问题修复完成');
+        } catch (error) {
+            console.error('修复Windows焦点问题失败:', error);
+            // 如果IPC调用失败，使用备用方案
+            this.fallbackFocusFix();
+        }
+    }
 
-        inputElements.forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                // 强制重置input元素的状态
+    // 备用的焦点修复方案
+    fallbackFocusFix() {
+        // 强制刷新所有input元素
+        const inputElements = document.querySelectorAll('input[type="text"], input[type="number"]');
+        inputElements.forEach(element => {
+            // 保存当前值
+            const currentValue = element.value;
+            // 临时禁用再启用
+            element.disabled = true;
+            setTimeout(() => {
                 element.disabled = false;
-                element.readonly = false;
-                
-                // 重新聚焦并失焦来刷新元素状态
-                element.focus();
-                element.blur();
-                
-                // 触发一个空的input事件来重新激活监听器
-                const inputEvent = new Event('input', { bubbles: true });
-                element.dispatchEvent(inputEvent);
-            }
+                element.value = currentValue;
+                // 触发change事件
+                element.dispatchEvent(new Event('change', { bubbles: true }));
+            }, 50);
         });
-
-        console.log('重新初始化input监听器完成');
+        
+        console.log('使用备用焦点修复方案');
     }
 }
 
